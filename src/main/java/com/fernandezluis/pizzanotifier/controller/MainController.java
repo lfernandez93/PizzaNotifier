@@ -8,7 +8,9 @@ package com.fernandezluis.pizzanotifier.controller;
 import com.fernandezluis.pizzanotifier.domain.Subscriber;
 import com.fernandezluis.pizzanotifier.service.SubscriberService;
 import com.fernandezluis.pizzanotifier.service.impl.SubscriberServiceImpl;
+import com.fernandezluis.pizzanotifier.utils.MailSender;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +30,10 @@ public class MainController {
 
     @Autowired
     SubscriberService subsService;
-
+    
+    @Autowired
+    MailSender mailSender;
+    
     @RequestMapping("/")
     public String getIndex() {
         return "index";
@@ -36,14 +41,13 @@ public class MainController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public String saveSubscription(@Valid Subscriber subscriber, BindingResult bidingResult, Model model) {
-        System.out.println("holasds");
-        System.out.println(subscriber.getEmail());
         if (bidingResult.hasErrors()) {
             model.addAttribute("error", true);
             return "redirect:/";
         }
         model.addAttribute("error", false);
         subsService.save(subscriber);
+        mailSender.sendMail("PizzaNotifier@mum.edu", subscriber.getEmail(), "Thanks for your subscription.", "Subscription completed");
         return "redirect:/saved";
     }
 
