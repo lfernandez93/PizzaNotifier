@@ -4,22 +4,70 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
-       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+    
+    <jpa:repositories base-package="com.fernandezluis.pizzanotifier.repository" entity-manager-factory-ref="entityManager"/>
+    
+    <bean id="entityManager" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="com.fernandezluis.pizzanotifier.domain" />
+     
+        <!--  provider-specific initialization,etc. -->
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <!-- 
+                    validate: validate the schema, makes no changes to the database.
+                    update: update the schema.
+                    create: creates the schema, destroying previous data.
+                    create-drop: drop the schema at the end of the session.
+                   These options intended to be developers tools and not to facilitate any production level databases 
+                            <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+                -->
+                <!-- hibernate.dialect. This property makes Hibernate 
+                generate the appropriate SQL for the chosen database. -->
+                
+                <prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenFiveDialect</prop>
+                <prop key="hibernate.show_sql">true</prop> 
+                <!--<prop key="hibernate.hbm2ddl.auto">create</prop>-->
+            </props>
+        </property>
+    </bean>
+    <!-- database configuration -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver"/>
+        <property name="url" value="jdbc:derby://localhost:1527/sample" />
+        <property name="username" value="app" />
+        <property name="password" value="app" />
+    </bean>
+    <!-- ;INIT=runscript from 'classpath:create.sql'\;runscript from 'classpath:populate.sql' -->
 
-    <!--bean id="propertyConfigurer"
-          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-          p:location="/WEB-INF/jdbc.properties" />
-
-<bean id="dataSource"
-    class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-    p:driverClassName="${jdbc.driverClassName}"
-    p:url="${jdbc.url}"
-    p:username="${jdbc.username}"
-    p:password="${jdbc.password}" /-->
-
-    <!-- ADD PERSISTENCE SUPPORT HERE (jpa, hibernate, etc) -->
-
+ 
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManager" />
+    </bean>
+   
+    <!-- Scan for  transaction-based resources -->
+    <context:component-scan base-package="com.fernandezluis.pizzanotifier.service" />
+    <context:component-scan base-package="com.fernandezluis.pizzanotifier.domain" />
+    <context:component-scan base-package="com.fernandezluis.pizzanotifier.repository" />
+    
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+ 
+    <!--
+        Post-processor to perform exception translation on @Repository classes
+        (from native exceptions such as JPA PersistenceExceptions to
+        Spring&rsquo;s DataAccessException hierarchy).
+    -->
+    <bean id="persistenceExceptionTranslationPostProcessor"
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 </beans>

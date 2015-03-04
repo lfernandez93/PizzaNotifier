@@ -2,19 +2,16 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"  %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-
-<!doctype html>
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <title>Pizza Notifier</title>
-
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script type="text/javascript" src="<c:url value="/resource/js/jquery.label_better.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/resource/js/jquery.flipping_text.js"/>"></script>
         <style>
             html {
                 height: 100%;
@@ -234,34 +231,32 @@
             }
 
         </style>
+
         <script>
             $(document).ready(function() {
-                $(".label_better").label_better({
-                    easing: "bounce"
+
+                $(".page-container").flipping_text({
+                    opacityEffect: true,
+                    tickerCount: 10,
+                    tickerTime: 10,
+                    customRandomChar: false,
+                    resetOnChange: true
                 });
             });
 
         </script>
     </head>
+
     <body>
         <div class="wrapper">
             <div class="main">
                 <div class="header">
                     <h1>Pizza Notifier</h1>
-                    <h2>Tired of going to Annapurna to try luck? you can now be notified when they have Pizza in there! </h2>
-                    <p class="credit">Created by <a href="https://github.com/lfernandez93">Luis Fernandez</a>
-                    <div class="btns">
+                    <h2>Your email have been saved you'll be notified when Pizza is available at Annapurna, Happy eating! </h2>
 
-                    </div>
                 </div>
                 <div class="page-container">
-                    <form:form class="bl_form" method="post">
-                        <input name="email" type="email" value=""  class="label_better" data-new-placeholder="Email Address" placeholder="Email Address"> 
-                        <input type="submit" class="reload btn" value="Subscribe" style=""/>
-                        <c:if test="${error ==true}">
-                            <label style="color: red">Your email is incorrect.</label>
-                        </c:if>
-                    </form:form>
+                    <label>We do not support Greek Pizza.</label>
                 </div>
             </div>
         </div>
