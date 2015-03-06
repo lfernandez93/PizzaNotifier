@@ -47,7 +47,7 @@ public class MainController {
         }
         model.addAttribute("error", false);
         subsService.save(subscriber);
-        mailSender.sendMail("PizzaNotifier@mum.edu", subscriber.getEmail(), "Thanks for your subscription.", "Subscription completed");
+        mailSender.sendMail("PizzaNotifier@gmail.com", subscriber.getEmail(), "Thanks for your subscription.", "Subscription completed");
         return "redirect:/saved";
     }
 

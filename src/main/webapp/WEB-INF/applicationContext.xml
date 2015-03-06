@@ -36,18 +36,18 @@
                 <!-- hibernate.dialect. This property makes Hibernate 
                 generate the appropriate SQL for the chosen database. -->
                 
-                <prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenFiveDialect</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <prop key="hibernate.show_sql">true</prop> 
-                <!--<prop key="hibernate.hbm2ddl.auto">create</prop>-->
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
             </props>
         </property>
     </bean>
     <!-- database configuration -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver"/>
-        <property name="url" value="jdbc:derby://localhost:1527/sample" />
-        <property name="username" value="app" />
-        <property name="password" value="app" />
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost/sample" />
+        <property name="username" value="root" />
+        <property name="password" value="Afv3Iv9KHN0C" />
     </bean>
     <!-- ;INIT=runscript from 'classpath:create.sql'\;runscript from 'classpath:populate.sql' -->
 

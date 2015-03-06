@@ -11,6 +11,7 @@ import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -24,14 +25,22 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public final class MailSender {
+
     @Asynchronous
-    public void sendMail(String from, String to, String body,String subject) {
+    public void sendMail(String from, String to, String body, String subject) {
         System.out.println("build email to " + to);
         Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.mum.edu");
-        props.put("mail.smtp.port", "25");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
 
-        Session mailSession = Session.getDefaultInstance(props);
+        Session mailSession = Session.getInstance(props,
+		  new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication("pizzanotifier@gmail.com", "21155183");
+			}
+		  });
         Message simpleMessage = new MimeMessage(mailSession);
 
         InternetAddress fromAddress = null;
