@@ -258,7 +258,7 @@
                     <form:form class="bl_form" method="post">
                         <input name="email" type="email" value=""  class="label_better" data-new-placeholder="Email Address" placeholder="Email Address"> 
                         <input type="submit" class="reload btn" value="Subscribe" style=""/>
-                        <c:if test="${error ==true}">
+                        <c:if test="${error == 'true'}">
                             <label style="color: red">Your email is incorrect.</label>
                         </c:if>
                     </form:form>
